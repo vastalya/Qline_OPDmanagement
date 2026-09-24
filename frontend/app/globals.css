@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  :root {
+    --qline-glow-a: rgba(15, 118, 110, 0.14);
+    --qline-glow-b: rgba(14, 165, 233, 0.1);
+  }
+
+  html {
+    font-family: 'Urbanist', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-bg text-text-primary;
+    min-height: 100dvh;
+    background-image:
+      radial-gradient(1200px circle at 100% 0%, var(--qline-glow-a), transparent 42%),
+      radial-gradient(900px circle at 0% 100%, var(--qline-glow-b), transparent 45%);
+  }
+
+  /* Focus ring */
+  :focus-visible {
+    outline: 2px solid theme('colors.primary');
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-border rounded-full; }
+}
+
+@layer utilities {
+  .glass-surface {
+    @apply bg-surface/85 border border-white/60 backdrop-blur-sm;
+  }
+
+  .section-shell {
+    @apply max-w-[1200px] mx-auto px-4 py-8;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .animate-in {
+    animation: animateIn 0.2s ease-out;
+  }
+  .fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+  .zoom-in-95 {
+    animation: zoomIn95 0.2s ease-out;
+  }
+}
+
+@keyframes animateIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes zoomIn95 {
+  from { transform: scale(0.95); }
+  to   { transform: scale(1); }
+}

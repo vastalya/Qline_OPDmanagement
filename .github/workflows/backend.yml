@@ -1,0 +1,51 @@
+name: Qline Backend CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'backend/**'
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  test:
+    name: Syntax Check & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Syntax check all JS files
+        working-directory: backend
+        run: |
+          find . -name "*.js" -not -path "*/node_modules/*" \
+            -exec node --check {} \;
+
+      - name: Run tests
+        working-directory: backend
+        env:
+          NODE_ENV: test
+          JWT_SECRET: test-secret-key-for-ci
+          JWT_REFRESH_SECRET: test-refresh-secret-key-for-ci
+          JWT_REFRESH_EXPIRY: 7d
+          ENABLE_INTEGRATION_TESTS: false
+        run: npm test
